@@ -11,15 +11,18 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-
+import com.example.week06.data.preferences.PreferencesHelper
+import android.content.Context
 data class ListItem(
     val id: Int,
     var isChecked: Boolean = false,
@@ -28,10 +31,21 @@ data class ListItem(
 
 @Composable
 fun WebScreen(navController: NavController) {
+
+    val context = LocalContext.current
     var newTask by remember { mutableStateOf("") }
     var isDeleteMany by remember { mutableStateOf(false) }
     var willDeleteList by remember { mutableStateOf(listOf<Int>()) }
-    var todoList by remember { mutableStateOf(listOf<ListItem>()) }
+    var todoList by rememberSaveable { mutableStateOf(listOf<ListItem>()) }
+
+    LaunchedEffect(Unit) {
+        todoList = PreferencesHelper.getTodoList(context)
+    }
+
+    LaunchedEffect(todoList) {
+        PreferencesHelper.saveTodoList(context, todoList)
+    }
+
 
     Box(
         modifier = Modifier
@@ -65,7 +79,9 @@ fun WebScreen(navController: NavController) {
                         todoList = todoList.filter { it.id !in willDeleteList }
                         willDeleteList = emptyList()
                     },
-                    modifier = Modifier.align(Alignment.TopEnd).padding(end = 40.dp)
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(end = 40.dp)
                 ) {
                     Icon(imageVector = Icons.Filled.Delete, contentDescription = "Delete All Checked")
                 }
@@ -136,9 +152,11 @@ fun WebScreen(navController: NavController) {
                         modifier = Modifier
                             .weight(1f)
                             .clickable {
-                                todoList = todoList.toMutableList().apply {
-                                    this[index] = this[index].copy(isChecked = !task.isChecked)
-                                }
+                                todoList = todoList
+                                    .toMutableList()
+                                    .apply {
+                                        this[index] = this[index].copy(isChecked = !task.isChecked)
+                                    }
                             },
                         style = MaterialTheme.typography.bodyMedium.copy(
                             textDecoration = if (task.isChecked) TextDecoration.LineThrough else TextDecoration.None

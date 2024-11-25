@@ -50,6 +50,8 @@ android {
 }
 
 dependencies {
+    implementation("com.google.code.gson:gson:2.8.8")
+
     implementation("androidx.navigation:navigation-compose:2.7.3")
 
     implementation("androidx.core:core-ktx:1.9.0")
