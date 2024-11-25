@@ -139,9 +139,6 @@ fun WebScreen(navController: NavController) {
                         Checkbox(
                             checked = willDeleteList.contains(task.id),
                             onCheckedChange = { isChecked ->
-                                todoList = todoList.toMutableList().apply {
-                                    this[index] = this[index].copy(isChecked = isChecked)
-                                }
                                 willDeleteList = if (isChecked) {
                                     willDeleteList + task.id
                                 } else {
