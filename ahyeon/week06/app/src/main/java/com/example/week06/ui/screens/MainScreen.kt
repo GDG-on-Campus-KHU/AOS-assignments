@@ -23,8 +23,8 @@ fun MainScreen(navController: NavController) {
         Button(onClick = { navController.navigate("mobile") }, modifier = Modifier.padding(8.dp)) {
             Text(text = "모바일 바로가기")
         }
-        Button(onClick = { navController.navigate("ai") }, modifier = Modifier.padding(8.dp)) {
-            Text(text = "AI 바로가기")
+        Button(onClick = { navController.navigate("search") }, modifier = Modifier.padding(8.dp)) {
+            Text(text = "네이버 검색")
         }
     }
 }
