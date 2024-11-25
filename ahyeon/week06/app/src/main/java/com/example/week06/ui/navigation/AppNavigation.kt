@@ -17,6 +17,6 @@ fun AppNavigation() {
         composable("main") { MainScreen(navController) }
         composable("web") { WebScreen(navController) }
         composable("ai") { AiScreen() }
-        composable("mobile"){ MobileScreen()}
+        composable("mobile"){ MobileScreen(navController)}
     }
 }

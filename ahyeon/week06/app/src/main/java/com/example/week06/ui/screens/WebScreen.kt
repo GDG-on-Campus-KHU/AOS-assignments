@@ -39,11 +39,11 @@ fun WebScreen(navController: NavController) {
     var todoList by rememberSaveable { mutableStateOf(listOf<ListItem>()) }
 
     LaunchedEffect(Unit) {
-        todoList = PreferencesHelper.getTodoList(context)
+        todoList = PreferencesHelper.getWebTodoList(context)
     }
 
     LaunchedEffect(todoList) {
-        PreferencesHelper.saveTodoList(context, todoList)
+        PreferencesHelper.saveWebTodoList(context, todoList)
     }
 
 
@@ -60,7 +60,7 @@ fun WebScreen(navController: NavController) {
             Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
         }
 
-        Text(text = "웹임!", style = MaterialTheme.typography.headlineMedium, modifier = Modifier.align(Alignment.TopCenter))
+        Text(text = "WEB", style = MaterialTheme.typography.headlineMedium, modifier = Modifier.align(Alignment.TopCenter))
 
         if (isDeleteMany) {
             Box(modifier = Modifier.fillMaxWidth()) {
