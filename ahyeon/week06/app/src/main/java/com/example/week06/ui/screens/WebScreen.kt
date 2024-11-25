@@ -31,11 +31,12 @@ data class ListItem(
 
 @Composable
 fun WebScreen(navController: NavController) {
-
     val context = LocalContext.current
     var newTask by remember { mutableStateOf("") }
     var isDeleteMany by remember { mutableStateOf(false) }
     var willDeleteList by remember { mutableStateOf(listOf<Int>()) }
+    var isDialogVisible by remember { mutableStateOf(false) }
+
     var todoList by rememberSaveable { mutableStateOf(listOf<ListItem>()) }
 
     LaunchedEffect(Unit) {
@@ -113,16 +114,19 @@ fun WebScreen(navController: NavController) {
 
             IconButton(
                 onClick = {
-                    if (newTask.isNotBlank()) {
+                    if (newTask.length > 4) {
                         val newItem = ListItem(id = todoList.size, value = newTask)
                         todoList = todoList + newItem
                         newTask = ""
+                    } else {
+                        isDialogVisible = true
                     }
                 },
                 modifier = Modifier.align(Alignment.End)
             ) {
                 Icon(imageVector = Icons.Filled.Add, contentDescription = "Add Task")
             }
+
 
             todoList.forEachIndexed { index, task ->
                 Row(
@@ -164,6 +168,20 @@ fun WebScreen(navController: NavController) {
                     )
                 }
             }
+        }
+        if (isDialogVisible) {
+            AlertDialog(
+                onDismissRequest = { isDialogVisible = false },
+                title = { Text(text = "경고") },
+                text = { Text("4글자 이상 입력해주세요") },
+                confirmButton = {
+                    Button(
+                        onClick = { isDialogVisible = false }
+                    ) {
+                        Text("OK")
+                    }
+                }
+            )
         }
     }
 }

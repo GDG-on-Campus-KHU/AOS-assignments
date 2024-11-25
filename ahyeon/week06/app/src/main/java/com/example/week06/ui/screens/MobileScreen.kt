@@ -107,16 +107,16 @@ fun MobileScreen(navController: NavController) {
 
             IconButton(
                 onClick = {
-                    if (newTask.isNotBlank()) {
                         val newItem = ListItem(id = todoList.size, value = newTask)
                         todoList = todoList + newItem
                         newTask = ""
-                    }
                 },
+                enabled = newTask.length > 4,
                 modifier = Modifier.align(Alignment.End)
             ) {
                 Icon(imageVector = Icons.Filled.Add, contentDescription = "Add Task")
             }
+
 
             todoList.forEachIndexed { index, task ->
                 Row(
