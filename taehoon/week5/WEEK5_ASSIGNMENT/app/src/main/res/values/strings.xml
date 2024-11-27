@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">WEEK5_ASSIGNMENT</string>
+    <string name="recyclerview_item_title">RecyclerView Item Title</string>
+    <string name="description_goes_here">Description goes here</string>
+    <string name="item_title">Item Title</string>
+    <string name="x">X</string>
+</resources>
