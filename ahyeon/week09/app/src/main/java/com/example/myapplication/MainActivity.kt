@@ -87,7 +87,7 @@ fun UserForm(database: AppDatabase, modifier: Modifier = Modifier) {
     var name by remember { mutableStateOf(TextFieldValue("")) }
     var age by remember { mutableStateOf(TextFieldValue("")) }
     var userList by remember { mutableStateOf(listOf<User>()) }
-    val selectedUsers = remember { mutableStateMapOf<User, Boolean>() }
+    val selectedUsers = remember { mutableStateMapOf<Int, Boolean>() }
 
     LaunchedEffect(Unit) {
         userList = userDao.getAllUsers()
@@ -144,8 +144,10 @@ fun UserForm(database: AppDatabase, modifier: Modifier = Modifier) {
                         coroutineScope.launch {
                             val usersToDelete = selectedUsers.filterValues { it }.keys
                             if (usersToDelete.isNotEmpty()) {
-                                userDao.deleteUsers(usersToDelete.toList())
+                                val usersToDeleteList = userList.filter { it.id in usersToDelete }
+                                userDao.deleteUsers(usersToDeleteList)
                                 userList = userDao.getAllUsers()
+                                selectedUsers.clear()
                             } else {
                                 Toast.makeText(context, "삭제할 사용자가 없습니다.", Toast.LENGTH_SHORT).show()
                             }
@@ -161,7 +163,17 @@ fun UserForm(database: AppDatabase, modifier: Modifier = Modifier) {
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             rowItems.forEach { user ->
-                                Text("${user.name}(${user.age})")
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Checkbox(
+                                        checked = selectedUsers[user.id] ?: false,
+                                        onCheckedChange = { isChecked ->
+                                            selectedUsers[user.id] = isChecked
+                                        }
+                                    )
+                                    Text("${user.name}(${user.age})")
+                                }
                             }
                         }
                     }
